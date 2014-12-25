@@ -1,5 +1,7 @@
-" Tanky Woo <me@tankywoo.com>
-" https://tankywoo.com
+" greatcl <development@greatcl.com>
+" https://greatcl.com
+:let b:authorname = "greatcl"
+:let b:authoremail = "development@greatcl.com"
 
 "========="
 " General "
@@ -23,7 +25,7 @@ set smarttab
 set autoindent " Copy indent from current line when starting a new line
 set softtabstop=4
 set smartindent shiftwidth=4
-"set expandtab " Use the space to instead of tab
+set expandtab " Use the space to instead of tab
 set smartindent
 set showmatch " When a bracket is inserted, briefly jump to the matching one
 set showmode " Show the mode
@@ -59,7 +61,7 @@ hi ColorColumn ctermbg=lightgrey guibg=lightgreya  " Highlighter cc
 function HeaderPython()
     call setline(1, "#!/usr/bin/env python")
     call append(1,  "# -*- coding: utf-8 -*-")
-    call append(2,  "# Tanky Woo @ " . strftime('%Y-%m-%d', localtime()))
+    call append(2,  "# ". b:authorname ." @ " . strftime('%Y-%m-%d', localtime()))
     normal G
     normal o
     normal o
@@ -69,12 +71,27 @@ autocmd bufnewfile *.py call HeaderPython()
 " .sh file auto add header
 function HeaderBash()
     call setline(1, "#!/bin/bash")
-    call append(1,  "# Tanky Woo @ " . strftime('%Y-%m-%d %T', localtime()))
+    call append(1,  "# " . b:authorname ." @ " . strftime('%Y-%m-%d %T', localtime()))
     normal G
     normal o
     normal o
 endf
 autocmd bufnewfile *.sh call HeaderBash()
+
+" .php file auto add header
+function HeaderPhp()
+    call setline(1, "<?php")
+    call append(1, "\/*")
+    call append(2, " * Created by VIM @ " . strftime('%Y-%m-%d %T', localtime()))
+    call append(3, " * @author " . b:authorname . "<" . b:authoremail . ">")
+    call append(4, " * @version 1.0.0")
+    call append(5, " *\/")
+    normal G
+    normal o
+    normal o
+    call append(8, "\/* End of file " . expand("%:t") . " *\/")
+endf
+autocmd bufnewfile *.php call HeaderPhp()
 
 "======================"
 " Bundle Configuration "
@@ -83,36 +100,36 @@ autocmd bufnewfile *.sh call HeaderBash()
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" call vundle#rc()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+" Bundle 'gmarik/vundle'
 
 " My Bundles here:
 "
 " original repos on github
-Bundle 'kevinw/pyflakes-vim'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'fs111/pydoc.vim'
-Bundle 'chriskempson/tomorrow-theme'
-Bundle 'kien/rainbow_parentheses.vim'
+" Bundle 'kevinw/pyflakes-vim'
+" Bundle 'Lokaltog/vim-powerline'
+" Bundle 'fs111/pydoc.vim'
+" Bundle 'chriskempson/tomorrow-theme'
+" Bundle 'kien/rainbow_parentheses.vim'
 
 " vim-scripts repos
 " NOTE:
 " `snipMate` will conflict with `PyDiction`, Google
 " `Auto-Pairs` is more useful than `AutoClose`
-Bundle 'taglist.vim'
-Bundle 'Tagbar'
-Bundle 'TaskList.vim'
-Bundle 'snipMate'
-Bundle 'ZenCoding.vim'
-Bundle 'Tabular'
-Bundle 'Auto-Pairs'
-Bundle 'Pydiction'
-Bundle 'The-NERD-tree'
-Bundle 'neocomplcache'
-Bundle 'Color-Scheme-Explorer'
+" Bundle 'taglist.vim'
+" Bundle 'Tagbar'
+" Bundle 'TaskList.vim'
+" Bundle 'snipMate'
+" Bundle 'ZenCoding.vim'
+" Bundle 'Tabular'
+" Bundle 'Auto-Pairs'
+" Bundle 'Pydiction'
+" Bundle 'The-NERD-tree'
+" Bundle 'neocomplcache'
+" Bundle 'Color-Scheme-Explorer'
 
 " non github repos
 
@@ -141,7 +158,7 @@ map <leader>tl :TaskList<CR>
 map <leader>tb :Tagbar<CR>
 map <leader>tbc :TagbarClose<CR>
 " PyDiction
-let g:pydiction_location = '/home/tankywoo/.vim/bundle/Pydiction/complete-dict' " TODO
+let g:pydiction_location = '/home/caolei/.vim/bundle/Pydiction/complete-dict' " TODO
 let g:pydiction_menu_height = 10
 " NERDTree
 nmap <leader>tne :NERDTree<CR>
@@ -204,3 +221,6 @@ highlight myFixme cterm=bold term=bold ctermbg=red ctermfg=black
 match myFixme /FIXME/
 highlight myXxx cterm=bold term=bold ctermbg=blue ctermfg=black
 match myXxx /\(XXX\|FIXME\)/
+
+set viminfo='10,\"100,:20,%,n~/.viminfo
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
